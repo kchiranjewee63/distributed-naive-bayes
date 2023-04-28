@@ -3,6 +3,8 @@ from functools import reduce
 from pyspark.sql.functions import sum as _sum
 from math import log
 
+LAPLACE_SMOOTHING_PARAMETER = 1
+
 def calPriorProbs(data):
     counts = data.groupBy("sentiment").count().rdd.collectAsMap()
     total = counts["positive"] + counts["negative"]
@@ -29,7 +31,7 @@ def train(data):
 
 def calLogProb(review, class_counts, class_prior_prob):
     words = review.split()
-    probs_list = [class_counts["words-counts"].get(word, 1)/class_counts["total-count"] for word in words]
+    probs_list = [class_counts["words-counts"].get(word, LAPLACE_SMOOTHING_PARAMETER)/(class_counts["total-count"] + LAPLACE_SMOOTHING_PARAMETER*len(class_counts["words-counts"])) for word in words]
     return log(class_prior_prob) + reduce(lambda a, b: a + log(b), probs_list, 0)
 
 def predict(review, parameters):
