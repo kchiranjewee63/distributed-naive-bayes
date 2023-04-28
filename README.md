@@ -9,7 +9,7 @@ Distributed Naive Bayes algorithm from scratch in PySpark using Kubernetes clust
 
 
 ## Deployment:
-1. Implement a server that runs on a single machine on Google Cloud Platform and does the following:
+1. Deployment a server on Google Cloud Platform that does the following:
 
    a. Loads the learned parameters.
 
