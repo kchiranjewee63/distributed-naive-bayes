@@ -36,5 +36,5 @@ def calLogProb(review, class_counts, class_prior_prob):
 
 def predict(review, parameters):
     pos_log_prob = calLogProb(review, parameters["pos-counts"], parameters["pos-prior-prob"])
-    neg_log_prob = calLogProb(review, parameters["neg-counts"], parameters["pos-prior-prob"])
+    neg_log_prob = calLogProb(review, parameters["neg-counts"], parameters["neg-prior-prob"])
     return "positive" if pos_log_prob > neg_log_prob else "negative"
