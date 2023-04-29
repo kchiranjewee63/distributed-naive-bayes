@@ -23,4 +23,4 @@ ENV PATH $PATH:${SPARK_HOME}/bin
 WORKDIR /src
 COPY . .
 
-# ENTRYPOINT ["python3", "main.py"]
+ENTRYPOINT ["python3", "main.py"]
