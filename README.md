@@ -1,5 +1,5 @@
 # distributed-naive-bayes-ensemble
-Distributed Naive Bayes Ensemble algorithm from scratch in PySpark using Kubernetes cluster on Google Cloud Platform
+Distributed Naive Bayes Ensemble from scratch in PySpark using Kubernetes cluster on Google Cloud Platform
 
 ## Training and Evaluation:
 
@@ -13,4 +13,4 @@ Distributed Naive Bayes Ensemble algorithm from scratch in PySpark using Kuberne
 
    a. Loads the learned parameters.
 
-   b. Provides an HTTP API that receives a text as input, processes it using the Naive Bayse algorithm and returns the sentiment score to the client as a response.
+   b. Provides an HTTP API that receives a text as input, processes it using the Naive Bayse Ensemble and returns the sentiment score to the client as a response.
