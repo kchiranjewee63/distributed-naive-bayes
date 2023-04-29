@@ -1,9 +1,9 @@
-# distributed-naive-bayes-ensemble
-Distributed Naive Bayes Ensemble from scratch in PySpark using Kubernetes cluster on Google Cloud Platform
+# naive-bayes-ensemble-in-pyspark
+Naive Bayes Ensemble from scratch in PySpark using Kubernetes cluster on Google Cloud Platform
 
 ## Training and Evaluation:
 
-1. Train and evaluate the Naive Bayes Ensemble in a distributed manner with n machines using Kubernetes on Google Cloud Platform.
+1. Train and evaluate the Naive Bayes Ensemble in PySpark in a distributed manner with n machines using Kubernetes on Google Cloud Platform.
 
 2. Save the learned parameters.
 
