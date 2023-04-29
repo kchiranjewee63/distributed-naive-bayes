@@ -7,14 +7,16 @@ RUN apk add --no-cache python3-dev && \
     ln -s /usr/bin/python3 /usr/bin/python
 RUN apk add --no-cache bash
 
+ENV SPARK_VERSION 3.2.4
+ENV HADOOP_VERSION 3.2
 
-RUN pip3 install pyspark
+RUN pip3 install pyspark==${SPARK_VERSION}
 
 
-RUN wget -q https://dlcdn.apache.org/spark/spark-3.2.4/spark-3.2.4-bin-hadoop3.2.tgz && \
-    tar -xzf spark-3.2.4-bin-hadoop3.2.tgz && \
-    mv spark-3.2.4-bin-hadoop3.2 spark && \
-    rm spark-3.2.4-bin-hadoop3.2.tgz
+RUN wget -q https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+    tar -xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+    mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark && \
+    rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
 
 
 ENV SPARK_HOME /spark
