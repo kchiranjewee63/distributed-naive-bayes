@@ -29,7 +29,7 @@ class IMDBMovieReviewData:
 
         # Stemming
         stemmer = SnowballStemmer(language='english')
-        stem_words_udf = udf(lambda review: " ".join([stemmer.stem(word) for word in review]))
+        stem_words_udf = udf(lambda review: " ".join([stemmer.stem(word) for word in review]), StringType())
         self.movie_reviews_df = self.movie_reviews_df.withColumn("review", stem_words_udf(self.movie_reviews_df.nonStopWords)).drop("nonStopWords")
 
     def splitData(self, training_fraction = 0.7, testing_fraction = 0.3):
