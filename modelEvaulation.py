@@ -4,7 +4,7 @@ from multiNomialNaiveBayse import predict
 
 def calAccuracy(data, parameters):
     predictor_udf = udf(lambda review: predict(review, parameters), StringType())
-    predictions = data.withColumn('prediction', predictor_udf(data.review))
-    accuracy = predictions.filter(predictions.sentiment == predictions.prediction).count()/data.count()
+    predictions = data.select('sentiment', predictor_udf(data.review).alias('prediction'))
+    accuracy = predictions.filter(predictions.sentiment == predictions.prediction).count()/predictions.count()
     return accuracy
     

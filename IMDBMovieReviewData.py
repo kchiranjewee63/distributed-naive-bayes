@@ -30,5 +30,3 @@ class IMDBMovieReviewData:
 
     def splitData(self, training_fraction = 0.7, testing_fraction = 0.3):
         self.training_data, self.testing_data = self.movie_reviews_df.randomSplit([training_fraction, testing_fraction])
-        self.movie_reviews_df.unpersist()
-        del self.movie_reviews_df
