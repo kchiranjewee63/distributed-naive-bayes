@@ -2,6 +2,7 @@ from pyspark.sql import SparkSession
 from IMDBMovieReviewData import IMDBMovieReviewData
 from multiNomialNaiveBayse import train
 from modelEvaulation import calAccuracy
+import json
 
 
 spark = SparkSession.builder.appName("SentimentAnalysis").getOrCreate()
@@ -20,6 +21,11 @@ data.splitData()
 
 print("Training multinomial naive bayse on IMBD data...")
 parameters = train(data.training_data)
+
+print("Writing learned parameters to a json file...")
+json_parameters = json.dumps(parameters)
+with open("parameters.json", "w") as outfile:
+    outfile.write(json_parameters)
 
 
 print("Calculating train accuracy...")
