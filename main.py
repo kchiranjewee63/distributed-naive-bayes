@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
 from IMDBMovieReviewData import IMDBMovieReviewData
-from multiNomialNaiveBayse import train
-from modelEvaulation import calAccuracy
+from multiNomialNaiveBayse import train, calAccuracy
 import json
 
 
