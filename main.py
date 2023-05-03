@@ -27,8 +27,8 @@ with open("parameters.json", "w") as outfile:
     outfile.write(json_parameters)
 
 
-print("Calculating train accuracy...")
-print(f"Train Accuracy: {calAccuracy(data.training_data, parameters)}")
+# print("Calculating train accuracy...")
+# print(f"Train Accuracy: {calAccuracy(data.training_data, parameters)}")
 
 print("Calculating test accuracy...")
 print(f"Test Accuracy: {calAccuracy(data.testing_data, parameters)}")

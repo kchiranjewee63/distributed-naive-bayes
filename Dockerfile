@@ -6,12 +6,13 @@ RUN apk add --no-cache python3-dev && \
     pip3 install --upgrade pip setuptools && \
     ln -s /usr/bin/python3 /usr/bin/python
 RUN apk add --no-cache bash
+RUN apk add --no-cache enchant-dev
+RUN apk add --no-cache aspell-en
 
 ENV SPARK_VERSION 3.2.4
 ENV HADOOP_VERSION 3.2
 
-RUN pip3 install pyspark==${SPARK_VERSION}
-RUN pip3 install nltk
+RUN pip3 install pyspark==${SPARK_VERSION} nltk pyenchant
 
 
 RUN wget -q https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
