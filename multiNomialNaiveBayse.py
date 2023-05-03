@@ -7,6 +7,9 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem.snowball import SnowballStemmer
 import enchant
+from pyspark.sql.functions import udf
+from pyspark.sql.types import StringType
+
 
 stop_words = set(stopwords.words('english'))
 stemmer = SnowballStemmer(language='english')
@@ -30,7 +33,7 @@ def postProcessing(words_counts):
         if word.strip() != '' and word not in stop_words and english_dictionary.check(word):
             processed_words_counts[stemmer.stem(word)] = words_counts[word] + processed_words_counts.get(stemmer.stem(word), 0)
 
-    return {key:value for key, value in processed_words_counts.items() if value > 10}
+    return {key:value for key, value in processed_words_counts.items() if value > FREQUENCY_THRESHOLD}
     
 def countWordsInAClass(reviews_data_frame, class_label):
     class_reviews = reviews_data_frame.filter(reviews_data_frame.sentiment == class_label)
@@ -60,3 +63,9 @@ def predict(review, parameters):
     pos_log_prob = calLogProb(processed_words, parameters["pos-counts"], parameters["pos-prior-prob"])
     neg_log_prob = calLogProb(processed_words, parameters["neg-counts"], parameters["neg-prior-prob"])
     return "positive" if pos_log_prob > neg_log_prob else "negative"
+
+def calAccuracy(data, parameters):
+    predictor_udf = udf(lambda review: predict(review, parameters), StringType())
+    predictions = data.select('sentiment', predictor_udf(data.review).alias('prediction'))
+    accuracy = predictions.filter(predictions.sentiment == predictions.prediction).count()/predictions.count()
+    return accuracy
