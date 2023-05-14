@@ -1,6 +1,6 @@
 from pyspark.sql import SparkSession
 from IMDBMovieReviewData import IMDBMovieReviewData
-from multiNomialNaiveBayse import train, calAccuracy
+from multiNomialNaiveBayse import train, calAccuracy, predictionStats
 import json
 
 
@@ -27,8 +27,8 @@ with open("parameters.json", "w") as outfile:
     outfile.write(json_parameters)
 
 
-# print("Calculating train accuracy...")
-# print(f"Train Accuracy: {calAccuracy(data.training_data, parameters)}")
+# print("Calculating train prediction stats ...")
+# print(f"Test Precision: {predictionStats(data.training_data, parameters)}")
 
-print("Calculating test accuracy...")
-print(f"Test Accuracy: {calAccuracy(data.testing_data, parameters)}")
+print("Calculating test prediction stats ...")
+print(f"Test Precision: {predictionStats(data.testing_data, parameters)}")

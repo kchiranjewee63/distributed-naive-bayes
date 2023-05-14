@@ -9,6 +9,7 @@ from nltk.stem.snowball import SnowballStemmer
 import enchant
 from pyspark.sql.functions import udf
 from pyspark.sql.types import StringType
+from pyspark.sql.functions import col
 
 
 stop_words = set(stopwords.words('english'))
@@ -69,3 +70,37 @@ def calAccuracy(data, parameters):
     predictions = data.select('sentiment', predictor_udf(data.review).alias('prediction'))
     accuracy = predictions.filter(predictions.sentiment == predictions.prediction).count()/predictions.count()
     return accuracy
+def predictionStats(data, parameters):
+    predictor_udf = udf(lambda review: predict(review, parameters), StringType())
+    predictions_df = data.select('sentiment', predictor_udf(data.review).alias('prediction'))
+    predictions = [row.prediction for row in predictions_df.select(col('prediction')).collect()]
+    true_labels = [row.sentiment for row in predictions_df.select(col('sentiment')).collect()]
+    unique_labels = ["positive", "negative"]
+    labels_to_index = {label: i for i, label in enumerate(unique_labels)}
+    confusion_matrix = [[0 for _ in unique_labels] for _ in unique_labels]
+    for i in range(len(predictions)):
+        prediction = predictions[i]
+        true_label = true_labels[i]
+        confusion_matrix[labels_to_index[true_label]][labels_to_index[prediction]] += 1
+    corr = 0
+    for i in range(len(unique_labels)):
+        corr += confusion_matrix[i][i]
+    accuracy = corr/sum([element for row in confusion_matrix for element in row])
+    if len(unique_labels) == 2:
+        positive_class_index = labels_to_index['positive']
+        negative_class_index = labels_to_index['negative']
+        tp = confusion_matrix[positive_class_index][positive_class_index]
+        fp = confusion_matrix[negative_class_index][positive_class_index]
+        fn = confusion_matrix[positive_class_index][negative_class_index]
+        precision = tp/(tp + fp)
+        recall = tp/(tp + fn)
+    else:
+        precisions = []
+        recalls = []
+        for index in labels_to_index.values():
+            precisions.append((confusion_matrix[index][index])/(sum([x[index] for x in confusion_matrix])))
+            recalls.append((confusion_matrix[index][index])/(sum(confusion_matrix[index])))
+        precision = sum(precisions)/len(precisions)
+        recall = sum(recalls)/len(recalls)
+    F1 = 2*precision*recall/(precision + recall)
+    return {"Accuracy": accuracy, "Precision": precision, "Recall": recall, "F1": F1, "Confusion Matrix": confusion_matrix}
